@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="multihomes:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/multihomes_jar2</output-path>
+    <root id="archive" name="multihomes.jar">
+      <element id="module-output" name="multihomes" />
+      <element id="artifact" artifact-name="multihomes:jar" />
+      <element id="dir-copy" path="$USER_HOME$/Desktop/moje pluginy/plugins" />
+    </root>
+  </artifact>
+</component>

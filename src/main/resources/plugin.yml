@@ -1,0 +1,10 @@
+name: Multihomes
+version: ${project.version}
+main: koral.multihomes.Multihomes
+api-version: 1.13
+commands:
+  sethome:
+  home:
+  delhome:
+  homehelp:
+
