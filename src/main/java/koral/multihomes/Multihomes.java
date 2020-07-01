@@ -1,5 +1,4 @@
 package koral.multihomes;
-
 import org.bukkit.*;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -23,6 +22,9 @@ import java.util.*;
 import static org.bukkit.Material.*;
 
 public final class Multihomes extends JavaPlugin implements Listener, CommandExecutor {
+    private multihomesCommands commandExecutor;
+
+
     File homesFile;
     File homedataFile;
     YamlConfiguration homedata;
@@ -38,7 +40,7 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
 
 
 
-        }
+    }
 
 
 
@@ -48,7 +50,6 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
         this.homes = YamlConfiguration.loadConfiguration(this.homesFile);
         this.homedataFile = new File(this.getDataFolder(), "homedata.yml");
         this.homedata = YamlConfiguration.loadConfiguration(this.homedataFile);
-
 
     }
 
@@ -85,12 +86,12 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
             // Plugin startup logic
         }
         getServer().getPluginManager().registerEvents(this, this);
-        this.getCommand("sethome");
-        this.getCommand("home");
-        this.getCommand("delhome");
+        this.commandExecutor = new multihomesCommands(this);
+        this.getCommand("sethome").setExecutor(this.commandExecutor);
+        this.getCommand("home").setExecutor(this.commandExecutor);
+        this.getCommand("delhome").setExecutor(this.commandExecutor);
+        this.getCommand("homehelp").setExecutor(this.commandExecutor);
         // Plugin startup logic
-
-
 
     }
 
@@ -103,179 +104,6 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
         // Plugin shutdown logic
     }
 
-
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        Player player = (Player) sender;
-        if (sender instanceof Player) {
-
-            if (label.equalsIgnoreCase("sethome") && args.length == 0)
-            {
-                player.sendMessage(ChatColor.RED + getConfig().getString("sethomenoargs"));
-            }
-            if (label.equalsIgnoreCase("sethome") && args.length > 0) {
-                final String id = player.getUniqueId().toString();
-          if (this.homedata.getString("Homes." + id + "." + ".Totalhomenumber") != null) {
-              ConfigurationSection cfgList = this.homes.getConfigurationSection("Homes." + id);
-              int counter = 0;
-
-              for (String home : cfgList.getKeys(false))                        //PRZELATYWANIE PRZEZ CALY PLIK
-              {
-                  counter++;
-              }
-              int value = counter;
-              this.homedata.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
-          }
-          else
-              {
-                  int value = 0;
-                  this.homedata.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
-                  this.saveHomeDataFile();
-              }
-         int value;
-          value = this.homedata.getInt("Homes." + id + "." + ".Totalhomenumber");
- if(this.homedata.getInt("Homes." + id + "." + ".Totalhomenumber") >= getConfig().getInt("maxhomes"))
-                this.homename = args[0].toLowerCase();
-                final String name = player.getName();
-                final double x = player.getLocation().getX();
-                final double y = player.getLocation().getY();
-                final double z = player.getLocation().getZ();
-                final float yaw = player.getLocation().getYaw();
-                final float pitch = player.getLocation().getPitch();
-                final String worldName = player.getWorld().getName();
-                this.homes.set("Homes." + id + "." + homename + ".X", (Object) x);
-                this.homes.set("Homes." + id + "." + homename + ".Y", (Object) y);
-                this.homes.set("Homes." + id + "." + homename + ".Z", (Object) z);
-                this.homes.set("Homes." + id + "." + homename + ".Yaw", (Object) yaw);
-                this.homes.set("Homes." + id + "." + homename + ".Pitch", (Object) pitch);
-                this.homes.set("Homes." + id + "." + homename + ".World", (Object) worldName);
-                this.homes.set("Homes." + id + "." + homename + ".Nickname", (Object) name);
-                this.homes.set("Homes." + id + "." + homename + ".Homename", (Object) homename);
-                this.saveHomesFile();
-                value++;
-                this.homedata.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
-                this.saveHomeDataFile();
-                player.sendMessage(ChatColor.GREEN + getConfig().getString("messagesucesssethome"));
-              //  int value = map.get(player.getName());
-            //    map.replace(player.getName(), value + 1);
-                this.saveHomesFile();
-                player.sendMessage("Aktualna liczba home: " + value);
-            }
-
-
-
-            if (label.equalsIgnoreCase("home") && args.length > 0) {
-                homename = args[0].toLowerCase();
-
-                final String id = player.getUniqueId().toString();
-                if(homename.equals(this.homes.getString("Homes." + id + "." + homename + ".Homename"))) {
-                    final double x = this.homes.getDouble("Homes." + id + "." + homename + ".X");
-                    final double y = this.homes.getDouble("Homes." + id + "." + homename + ".Y");
-                    final double z = this.homes.getDouble("Homes." + id + "." + homename + ".Z");
-                    final float yaw = (float) this.homes.getLong("Homes." + id + "." + homename + ".Yaw");
-                    final float pitch = (float) this.homes.getLong("Homes." + id + "." + homename + ".Pitch");
-                    final World world = Bukkit.getWorld(this.homes.getString("Homes." + id + "." + homename + ".World"));
-                    final Location home = new Location(world, x, y, z, yaw, pitch);
-                    player.teleport(home);
-                    player.sendMessage(ChatColor.GREEN + getConfig().getString("messagesucesshome") + ChatColor.RED + args[0]);
-
-                }
-                else player.sendMessage(ChatColor.RED + getConfig().getString("sethomenull"));
-// this.homes total -  additionalhomes >= config limiter;
-
-            }
-
-            if (label.equalsIgnoreCase("home") && args.length == 0)
-            {
-                final String id = player.getUniqueId().toString();
-                ConfigurationSection cfgList = this.homes.getConfigurationSection("Homes." + id);
-                List<String> list = new ArrayList<>(); // LISTA
-
-                if (cfgList == null || cfgList.getKeys(false).size() == 0) {
-                    player.sendMessage( ChatColor.RED + getConfig().getString("homelistnull"));
-                    return true;
-                }
-                for (String home : cfgList.getKeys(false))                        //PRZELATYWANIE PRZEZ CALY PLIK
-                {
-                   // player.sendMessage("Home: " + cfgList.getString(home + ".Homename"));      //Wyswietlanie kazdego po kolei
-                    list.add(home);
-                                                                                                 // DODAWANIE DO LISTY KAZDEGO KLUCZA PRZEZ FORA
-                }
-                player.sendMessage(ChatColor.DARK_RED + getConfig().getString("homelist") + ChatColor.RED+ list.toString());
-
-            }
-            if(label.equalsIgnoreCase("homehelp"))
-            {
-                  player.sendMessage(ChatColor.RED + "/home" + ChatColor.YELLOW +" - Wyswietlanie listy domow");
-                player.sendMessage(ChatColor.RED + "/sethome nazwa" + ChatColor.YELLOW +" - Ustawianie domu");
-                player.sendMessage(ChatColor.RED + "/delhome nazwa" + ChatColor.YELLOW +" - Usuwanie domu");
-            }
-
-            if (label.equalsIgnoreCase("delhome") && args.length > 0)
-            {
-                final String id = player.getUniqueId().toString();
-                homename = args[0].toLowerCase();
-                if(homename.equals(this.homes.getString("Homes." + id + "." + homename + ".Homename")))
-                {
-                    this.homes.set("Homes." + id + "." + homename, (Object) null);
-                    this.saveHomesFile();
-                    player.sendMessage(ChatColor.RED + getConfig().getString("youdeletedhome") + args[0]);
-                    int value = this.homedata.getInt("Homes." + id + "." + ".Totalhomenumber");
-                    value--;
-                    this.homedata.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
-                    this.saveHomeDataFile();
-                 //   int value = map.get(player.getName());
-                  //  map.replace(player.getName(), value - 1);
-                }
-                else
-                    player.sendMessage(args[0] + getConfig().getString("unknownhome"));
-            }
-
-            if (label.equalsIgnoreCase("delhome") && args.length == 0)
-            {
-                player.sendMessage(ChatColor.RED + getConfig().getString("delhomenoargs"));
-            }
-
-
-
-
-        }
-        return true;
-    }
-
-
- /*   @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e)
-    {
-        Player p = e.getPlayer();
-        final String id = p.getUniqueId().toString();
-        int value = 0;
-        this.homedata.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
-        this.saveHomeDataFile();
-    }
-
-
-  */
-
-
-/*@EventHandler
-         public void onPlayerJoin(PlayerJoinEvent e)
-{
-
-    Player p = e.getPlayer();
-    if(!p.hasPlayedBefore())
-    {
-        int value = 0;
-        final String id = p.getUniqueId().toString();
-        this.homes.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
-     saveHomesFile();
-    }
-    int value = 0;
-    final String id = p.getUniqueId().toString();
-    this.homes.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
-    this.saveHomesFile();
-}
-
- */
 
     @EventHandler
     public void onPlayerClicks(PlayerInteractEvent event) {
@@ -298,15 +126,15 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
 
 
 
-        private void saveHomesFile () {
-            try {
-                this.homes.save(this.homesFile);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    public void saveHomesFile() {
+        try {
+            this.homes.save(this.homesFile);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
 
-    private void saveHomeDataFile () {
+    void saveHomeDataFile() {
         try {
             this.homedata.save(this.homedataFile);
         } catch (IOException e) {
@@ -316,4 +144,4 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
 
 
 
-    }
+}
