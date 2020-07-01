@@ -1,28 +1,16 @@
 package koral.multihomes;
-import org.bukkit.*;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
-
-import org.bukkit.entity.Player;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import java.io.File;
-import java.util.*;
 
 import static org.bukkit.Material.*;
 
 public final class Multihomes extends JavaPlugin implements Listener, CommandExecutor {
     private multihomesCommands commandExecutor;
+    private multihomesPlayerListener playerListener;
 
 
     File homesFile;
@@ -85,7 +73,8 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
             reloadConfig();    //reloads the config
             // Plugin startup logic
         }
-        getServer().getPluginManager().registerEvents(this, this);
+        this.playerListener = new multihomesPlayerListener(this);
+        getServer().getPluginManager().registerEvents(this.playerListener, this);
         this.commandExecutor = new multihomesCommands(this);
         this.getCommand("sethome").setExecutor(this.commandExecutor);
         this.getCommand("home").setExecutor(this.commandExecutor);
@@ -103,25 +92,6 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
         this.saveHomeDataFile();
         // Plugin shutdown logic
     }
-
-
-    @EventHandler
-    public void onPlayerClicks(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
-        Action action = event.getAction();
-        ItemStack item = event.getItem();
-        String mats;
-
-        if ( action.equals( Action.RIGHT_CLICK_AIR ) || action.equals( Action.RIGHT_CLICK_BLOCK ) ) {
-            if ( item != null && item.getType() == Material.valueOf("material")) {
-                player.sendMessage( "You have right click a diamond!" );
-                item.setAmount(item.getAmount() -1);
-
-            }
-        }
-
-    }
-
 
 
 
