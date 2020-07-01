@@ -44,37 +44,41 @@ public class multihomesCommands implements CommandExecutor {
                     this.plugin.homedata.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
                 } else {
                     int value = 0;
+                    int additionalValue = 0;
                     this.plugin.homedata.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
+                    this.plugin.homedata.set("Homes." + id + "." +  ".PlayerAdditionalHomes", (Object) additionalValue);
                     this.plugin.saveHomeDataFile();
                 }
                 int value;
                 value = this.plugin.homedata.getInt("Homes." + id + "." + ".Totalhomenumber");
-                if (this.plugin.homedata.getInt("Homes." + id + "." + ".Totalhomenumber") >= plugin.getConfig().getInt("maxhomes"))
+                if (this.plugin.homedata.getInt("Homes." + id + "." + ".Totalhomenumber")  - this.plugin.homedata.getInt("Homes." + id + "." + ".PlayerAdditionalHomes") < plugin.getConfig().getInt("maxhomes")) {
                     this.plugin.homename = args[0].toLowerCase();
-                final String name = player.getName();
-                final double x = player.getLocation().getX();
-                final double y = player.getLocation().getY();
-                final double z = player.getLocation().getZ();
-                final float yaw = player.getLocation().getYaw();
-                final float pitch = player.getLocation().getPitch();
-                final String worldName = player.getWorld().getName();
-                this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".X", (Object) x);
-                this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Y", (Object) y);
-                this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Z", (Object) z);
-                this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Yaw", (Object) yaw);
-                this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Pitch", (Object) pitch);
-                this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".World", (Object) worldName);
-                this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Nickname", (Object) name);
-                this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Homename", (Object) plugin.homename);
-                this.plugin.saveHomesFile();
-                value++;
-                this.plugin.homedata.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
-                this.plugin.saveHomeDataFile();
-                player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesssethome"));
-                //  int value = map.get(player.getName());
-                //    map.replace(player.getName(), value + 1);
-                this.plugin.saveHomesFile();
-                player.sendMessage("Aktualna liczba home: " + value);
+                    final String name = player.getName();
+                    final double x = player.getLocation().getX();
+                    final double y = player.getLocation().getY();
+                    final double z = player.getLocation().getZ();
+                    final float yaw = player.getLocation().getYaw();
+                    final float pitch = player.getLocation().getPitch();
+                    final String worldName = player.getWorld().getName();
+                    this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".X", (Object) x);
+                    this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Y", (Object) y);
+                    this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Z", (Object) z);
+                    this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Yaw", (Object) yaw);
+                    this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Pitch", (Object) pitch);
+                    this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".World", (Object) worldName);
+                    this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Nickname", (Object) name);
+                    this.plugin.homes.set("Homes." + id + "." + plugin.homename + ".Homename", (Object) plugin.homename);
+                    this.plugin.saveHomesFile();
+                    value++;
+                    this.plugin.homedata.set("Homes." + id + "." + ".Totalhomenumber", (Object) value);
+                    this.plugin.saveHomeDataFile();
+                    player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesssethome"));
+                    //  int value = map.get(player.getName());
+                    //    map.replace(player.getName(), value + 1);
+                    this.plugin.saveHomesFile();
+                }
+                else
+                    player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youneeditem") + ChatColor.DARK_RED+ this.plugin.getConfig().getString("item"));
             }
 
 
@@ -136,7 +140,7 @@ public class multihomesCommands implements CommandExecutor {
                     //   int value = map.get(player.getName());
                     //  map.replace(player.getName(), value - 1);
                 } else
-                    player.sendMessage(args[0] + plugin.getConfig().getString("unknownhome"));
+                    player.sendMessage( ChatColor.RED + plugin.getConfig().getString("unknownhome")  + ChatColor.DARK_RED + args[0]);
             }
 
             if (label.equalsIgnoreCase("delhome") && args.length == 0) {

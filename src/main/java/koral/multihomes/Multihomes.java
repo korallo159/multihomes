@@ -50,17 +50,6 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
         File file = new File(getDataFolder() + File.separator + "config.yml"); //This will get the config file
         if (!file.exists()) { //This will check if the file exist
             //Situation A, File doesn't exist
-            getConfig().addDefault("messagesucesshome", "Zostałeś przeteleportowany do "); //adding default settings
-            getConfig().addDefault("messagesucesssethome", "Dom ustawiony"); //adding default settings
-            getConfig().addDefault("sethomenoargs", "Poprawne użycie /sethome <nazwa domu>"); //adding default settings
-            getConfig().addDefault("sethomenull", "Taki dom nie istnieje"); //adding default settings
-            getConfig().addDefault("homelist", "Lista domów :"); //adding default settings
-            getConfig().addDefault("homelistnull", "Nie masz żadnych domów"); //adding default settings
-            getConfig().addDefault("delhomenoargs", "Poprawne użycie /delhome <nazwa domu>"); //adding default settings
-            getConfig().addDefault("youdeletedhome", "Usunąleś dom: "); //adding default settings
-            getConfig().addDefault("unknownhome", "Nie masz zapisanego domu : "); //adding default settings
-            getConfig().addDefault("maxhomenumber", "Nie masz zapisanego domu : ");
-            getConfig().addDefault("material", DIAMOND); //adding default settings
 
 
             //Save the default settings
