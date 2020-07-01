@@ -78,7 +78,7 @@ public class multihomesCommands implements CommandExecutor {
                     this.plugin.saveHomesFile();
                 }
                 else
-                    player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youneeditem") + ChatColor.DARK_RED+ this.plugin.getConfig().getString("item"));
+                    player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youneeditem") + this.plugin.getConfig().getInt("itemamount") + ChatColor.DARK_RED+ this.plugin.getConfig().getString("item"));
             }
 
 
@@ -121,9 +121,9 @@ public class multihomesCommands implements CommandExecutor {
 
             }
             if (label.equalsIgnoreCase("homehelp")) {
-                player.sendMessage(ChatColor.RED + "/home" + ChatColor.YELLOW + " - Wyswietlanie listy domow");
-                player.sendMessage(ChatColor.RED + "/sethome nazwa" + ChatColor.YELLOW + " - Ustawianie domu");
-                player.sendMessage(ChatColor.RED + "/delhome nazwa" + ChatColor.YELLOW + " - Usuwanie domu");
+                player.sendMessage(ChatColor.RED + "/home" + ChatColor.YELLOW + plugin.getConfig().getString("home"));
+                player.sendMessage(ChatColor.RED + "/sethome <arg>" + ChatColor.YELLOW + plugin.getConfig().getString("sethome"));
+                player.sendMessage(ChatColor.RED + "/delhome <arg>" + ChatColor.YELLOW + plugin.getConfig().getString("delhome"));
             }
 
             if (label.equalsIgnoreCase("delhome") && args.length > 0) {

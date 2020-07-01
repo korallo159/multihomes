@@ -1,4 +1,4 @@
-messagesucesshome: 'Zostałeś przeteleportowany do'
+messagesucesshome: 'Zostałeś przeteleportowany do '
 messagesucesssethome: 'Dom ustawiony'
 sethomenoargs: 'Poprawne uzycie /sethome <nazwa domu>'
 sethomenull: 'Taki dom nie istnieje'
@@ -7,7 +7,12 @@ homelist: 'Lista domow'
 unknownhome: 'Nie masz zapisanego domu '
 delhomenoargs: 'Poprawne uzycie /delhome <nazwa domu>'
 youdeletedhome: 'Usuniety dom: '
-item: 'DIAMOND_BLOCK'
+item: 'DIAMOND'
+itemamount: 64
 itemconsumed: 'Zwiekszyles limit home o 1!'
 maxhomes: 5
 youneeditem: 'Aby zwiększyć liczbę home zdobądź '
+sethome: ' - Ustawianie domu'
+home: ' - Wyswietlanie listy domow'
+delhome: ' - Usuwanie domu'
+
