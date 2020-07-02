@@ -32,7 +32,7 @@ public class multihomesPlayerListener implements Listener {
                         item.setAmount(item.getAmount() - plugin.getConfig().getInt("itemamount"));
                         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_SHOOT, 1, 1);
                         int additionalValue;
-                        additionalValue = this.plugin.homedata.getInt("Homes." + id + ".PlayerMaxHomes");
+                        additionalValue = this.plugin.homedata.getInt("Homes." + id + "." + ".PlayerAdditionalHomes");
                         additionalValue++;
                         this.plugin.homedata.set("Homes." + id + "." + ".PlayerAdditionalHomes", (Object) additionalValue);
                         player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("itemconsumed"));
