@@ -99,19 +99,27 @@ public class multihomesCommands implements CommandExecutor {
                     final float pitch = (float) this.plugin.homes.getLong("Homes." + id + "." + plugin.homename + ".Pitch");
                     final World world = Bukkit.getWorld(this.plugin.homes.getString("Homes." + id + "." + plugin.homename + ".World"));
                     final Location home = new Location(world, x, y, z, yaw, pitch);
+                    Location a = player.getLocation();
                     if(!player.hasPermission("multihomes.bypass.delay")) {
                         player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youwillbetp") +ChatColor.DARK_RED + this.plugin.getConfig().getInt("delaytime") + "s");
                         this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
                             public void run() {
-                                player.teleport(home);
-                                player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + args[0]);
+                                Location b = player.getLocation();
+                                if(a.equals(b)) {
+                                    player.teleport(home);
+                                    player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + args[0]);
+                                }
+                                else {
+                                    player.sendMessage(ChatColor.RED + plugin.getConfig().getString("tpcanceled"));
+                                    Bukkit.getScheduler().cancelTasks(plugin);
+                                }
                             }
                         }, 20L * plugin.getConfig().getInt("delaytime"));// 60 L == 3 sec, 20 ticks == 1 sec
                     }
                     else
                     {
                         player.teleport(home);
-                        player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + args[0]);
+                        player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + ChatColor.DARK_RED +args[0]);
                     }
 
                 }

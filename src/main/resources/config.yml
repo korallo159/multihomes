@@ -16,5 +16,6 @@ sethome: ' - Setting home'
 home: ' - Displaying list of homes'
 delhome: ' - Deleting home'
 youwillbetp: 'You will be teleported in: '
+tpcanceled: 'You moved, so teleport is canceled'
 delaytime: 3
 
