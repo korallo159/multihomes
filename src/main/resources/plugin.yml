@@ -7,4 +7,13 @@ commands:
   home:
   delhome:
   homehelp:
+  homereload:
+    usage: /homereload
+    description: reload configuration files
+    permission: multihomes.reload
+    permission-message: Sorry! You don't have permission to execute that command.
+permissions:
+  multihomes.reload:
+    description: allows usage /homereload
+    default: op
 

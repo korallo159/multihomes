@@ -63,6 +63,7 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
         this.getCommand("home").setExecutor(this.commandExecutor);
         this.getCommand("delhome").setExecutor(this.commandExecutor);
         this.getCommand("homehelp").setExecutor(this.commandExecutor);
+        this.getCommand("homereload").setExecutor(this.commandExecutor);
         // Plugin startup logic
 
     }

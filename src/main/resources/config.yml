@@ -1,3 +1,12 @@
+
+#in this simple config, you can manage some gameplay and translate messages#
+#==========================================================================#
+#=================If you have any bugs please report it!===================#
+
+
+
+
+
 messagesucesshome: 'Teleported to: '
 messagesucesssethome: 'Home set.'
 sethomenoargs: 'Usage /sethome <home>'
@@ -18,4 +27,6 @@ delhome: ' - Deleting home'
 youwillbetp: 'You will be teleported in: '
 tpcanceled: 'You moved, so teleport is canceled'
 delaytime: 3
+reloadsuccesful: 'Config reloaded.'
+nopermissions: 'you dont have permissions'
 

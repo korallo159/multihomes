@@ -99,13 +99,21 @@ public class multihomesCommands implements CommandExecutor {
                     final float pitch = (float) this.plugin.homes.getLong("Homes." + id + "." + plugin.homename + ".Pitch");
                     final World world = Bukkit.getWorld(this.plugin.homes.getString("Homes." + id + "." + plugin.homename + ".World"));
                     final Location home = new Location(world, x, y, z, yaw, pitch);
-                    Location a = player.getLocation();
+                    final World temporaryworld = player.getWorld();
+                    final double xa = player.getLocation().getX();
+                    final double ya = player.getLocation().getY();
+                    final double za = player.getLocation().getZ();
+                    final Location temporary = new Location(temporaryworld, xa, ya, za);
                     if(!player.hasPermission("multihomes.bypass.delay")) {
                         player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youwillbetp") +ChatColor.DARK_RED + this.plugin.getConfig().getInt("delaytime") + "s");
                         this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
                             public void run() {
-                                Location b = player.getLocation();
-                                if(a.equals(b)) {
+                                final World temporaryworld2 = player.getWorld();
+                                final double xb = player.getLocation().getX();
+                                final double yb = player.getLocation().getY();
+                                final double zb = player.getLocation().getZ();
+                                final Location temporary2 = new Location(temporaryworld2, xb, yb, zb);
+                                if(temporary.equals(temporary2)) {
                                     player.teleport(home);
                                     player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + args[0]);
                                 }
@@ -175,6 +183,16 @@ public class multihomesCommands implements CommandExecutor {
 
             if (label.equalsIgnoreCase("delhome") && args.length == 0) {
                 player.sendMessage(ChatColor.RED + plugin.getConfig().getString("delhomenoargs"));
+            }
+
+
+            if (label.equalsIgnoreCase("homereload") && args.length == 0) {
+                    player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("reloadsuccesful"));
+                    this.plugin.reloadConfig();
+                    this.plugin.saveConfig();
+                    this.plugin.saveHomeDataFile();
+                    this.plugin.saveHomesFile();
+
             }
 
 
