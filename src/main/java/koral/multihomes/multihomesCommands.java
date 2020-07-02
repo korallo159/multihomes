@@ -10,15 +10,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class multihomesCommands implements CommandExecutor {
 
     Multihomes plugin;
-
     public multihomesCommands(final Multihomes plugin) {
         this.plugin = plugin;
     }
@@ -30,6 +33,8 @@ public class multihomesCommands implements CommandExecutor {
             if (label.equalsIgnoreCase("sethome") && args.length == 0) {
                 player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("sethomenoargs"));
             }
+
+
             if (label.equalsIgnoreCase("sethome") && args.length > 0) {
                 final String id = player.getUniqueId().toString();
                 if (this.plugin.homedata.getString("Homes." + id + "." + ".Totalhomenumber") != null) {
@@ -78,7 +83,7 @@ public class multihomesCommands implements CommandExecutor {
                     this.plugin.saveHomesFile();
                 }
                 else
-                    player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youneeditem") + this.plugin.getConfig().getInt("itemamount") + ChatColor.DARK_RED+ this.plugin.getConfig().getString("item"));
+                    player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youneeditem") + this.plugin.getConfig().getInt("itemamount") + " " + ChatColor.DARK_RED+ this.plugin.getConfig().getString("item"));
             }
 
 
@@ -94,13 +99,27 @@ public class multihomesCommands implements CommandExecutor {
                     final float pitch = (float) this.plugin.homes.getLong("Homes." + id + "." + plugin.homename + ".Pitch");
                     final World world = Bukkit.getWorld(this.plugin.homes.getString("Homes." + id + "." + plugin.homename + ".World"));
                     final Location home = new Location(world, x, y, z, yaw, pitch);
-                    player.teleport(home);
-                    player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + ChatColor.RED + args[0]);
+                    if(!player.hasPermission("multihomes.bypass.delay")) {
+                        player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youwillbetp") +ChatColor.DARK_RED + this.plugin.getConfig().getInt("delaytime") + "s");
+                        this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
+                            public void run() {
+                                player.teleport(home);
+                                player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + args[0]);
+                            }
+                        }, 20L * plugin.getConfig().getInt("delaytime"));// 60 L == 3 sec, 20 ticks == 1 sec
+                    }
+                    else
+                    {
+                        player.teleport(home);
+                        player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + args[0]);
+                    }
 
-                } else player.sendMessage(ChatColor.RED + plugin.getConfig().getString("sethomenull"));
+                }
+                else player.sendMessage(ChatColor.RED + plugin.getConfig().getString("sethomenull"));
 // this.homes total -  additionalhomes >= config limiter;
 
             }
+
 
             if (label.equalsIgnoreCase("home") && args.length == 0) {
                 final String id = player.getUniqueId().toString();
@@ -120,11 +139,13 @@ public class multihomesCommands implements CommandExecutor {
                 player.sendMessage(ChatColor.DARK_RED + plugin.getConfig().getString("homelist") + ChatColor.RED + list.toString());
 
             }
+
             if (label.equalsIgnoreCase("homehelp")) {
                 player.sendMessage(ChatColor.RED + "/home" + ChatColor.YELLOW + plugin.getConfig().getString("home"));
                 player.sendMessage(ChatColor.RED + "/sethome <arg>" + ChatColor.YELLOW + plugin.getConfig().getString("sethome"));
                 player.sendMessage(ChatColor.RED + "/delhome <arg>" + ChatColor.YELLOW + plugin.getConfig().getString("delhome"));
             }
+
 
             if (label.equalsIgnoreCase("delhome") && args.length > 0) {
                 final String id = player.getUniqueId().toString();
@@ -143,6 +164,7 @@ public class multihomesCommands implements CommandExecutor {
                     player.sendMessage( ChatColor.RED + plugin.getConfig().getString("unknownhome")  + ChatColor.DARK_RED + args[0]);
             }
 
+
             if (label.equalsIgnoreCase("delhome") && args.length == 0) {
                 player.sendMessage(ChatColor.RED + plugin.getConfig().getString("delhomenoargs"));
             }
@@ -151,5 +173,9 @@ public class multihomesCommands implements CommandExecutor {
         }
         return true;
     }
+
+
+
+
 
 }

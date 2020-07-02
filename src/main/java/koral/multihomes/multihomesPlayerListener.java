@@ -27,17 +27,19 @@ public class multihomesPlayerListener implements Listener {
 
         if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
                 if (item != null && item.getType() == Material.valueOf(this.plugin.getConfig().getString("item"))) {
-                    player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("itemconsumed"));
-                    if(item.getAmount()>=plugin.getConfig().getInt("itemamount")) {
+                    if(item.getAmount() >=plugin.getConfig().getInt("itemamount"))
+                    {
                         item.setAmount(item.getAmount() - plugin.getConfig().getInt("itemamount"));
                         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_SHOOT, 1, 1);
                         int additionalValue;
                         additionalValue = this.plugin.homedata.getInt("Homes." + id + ".PlayerMaxHomes");
                         additionalValue++;
                         this.plugin.homedata.set("Homes." + id + "." + ".PlayerAdditionalHomes", (Object) additionalValue);
+                        player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("itemconsumed"));
                         this.plugin.saveHomeDataFile();
                     }
-
+                    else
+                        player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youneeditem") + ChatColor.DARK_RED + this.plugin.getConfig().getString("item") + " " +this.plugin.getConfig().getInt("itemamount"));
                 }
 
 

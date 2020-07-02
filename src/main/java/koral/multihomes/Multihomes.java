@@ -4,6 +4,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import java.io.IOException;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitScheduler;
+
 import java.io.File;
 
 import static org.bukkit.Material.*;
@@ -19,16 +21,7 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
     YamlConfiguration homes;
     String homename;
 
-    public void CheckConfig() {
-        if (getConfig().get("Name") == null) { //if the setting has been deleted it will be null
-            getConfig().set("Name", "Value"); //reset the setting
-            saveConfig();
-            reloadConfig();
-        }
 
-
-
-    }
 
 
 
@@ -52,12 +45,13 @@ public final class Multihomes extends JavaPlugin implements Listener, CommandExe
             //Situation A, File doesn't exist
 
 
+
+
             //Save the default settings
             getConfig().options().copyDefaults(true);
             saveConfig();
         } else {
             //situation B, Config does exist
-            CheckConfig(); //function to check the important settings
             saveConfig(); //saves the config
             reloadConfig();    //reloads the config
             // Plugin startup logic
