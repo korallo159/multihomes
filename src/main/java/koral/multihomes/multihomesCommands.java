@@ -161,7 +161,7 @@ public class multihomesCommands implements CommandExecutor {
                     list.add(home);
                     // DODAWANIE DO LISTY KAZDEGO KLUCZA PRZEZ FORA
                 }
-                player.sendMessage(ChatColor.DARK_RED + plugin.getConfig().getString("homelist") + ChatColor.RED + list.toString());
+                player.sendMessage(ChatColor.DARK_RED + plugin.getConfig().getString("homelist") +  ChatColor.GRAY + this.plugin.homedata.getInt("Homes." + id + "." + ".Totalhomenumber") + "/" + (plugin.getConfig().getInt("maxhomes") + this.plugin.homedata.getInt("Homes." + id + "." + ".PlayerAdditionalHomes")) + ChatColor.RED + " " + list.toString());
 
             }
 
@@ -180,7 +180,7 @@ public class multihomesCommands implements CommandExecutor {
                     list.add(home);
                     // DODAWANIE DO LISTY KAZDEGO KLUCZA PRZEZ FORA
                 }
-                player.sendMessage(ChatColor.DARK_RED + plugin.getConfig().getString("homelist") + ChatColor.RED + list.toString());
+                player.sendMessage(ChatColor.DARK_RED + plugin.getConfig().getString("homelist") +  ChatColor.GRAY + this.plugin.homedata.getInt("Homes." + id + "." + ".Totalhomenumber") + "/" + (plugin.getConfig().getInt("maxhomes") + this.plugin.homedata.getInt("Homes." + id + "." + ".PlayerAdditionalHomes")) + ChatColor.RED + " " + list.toString());
 
             }
 
