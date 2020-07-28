@@ -1,5 +1,6 @@
 package koral.multihomes;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -24,8 +25,12 @@ public class multihomesTabCompletion implements TabCompleter {
     {
         Player player = (Player) sender;
           if(args.length <= 1){
+
               final String id = player.getUniqueId().toString();
               ConfigurationSection cfgList = this.plugin.homes.getConfigurationSection("Homes." + id);
+              if (cfgList == null || cfgList.getKeys(false).size() == 0) {
+                  return null;
+              }
               List<String> lista = new ArrayList<>(); // LISTA
               for (String home : cfgList.getKeys(false))                        //PRZELATYWANIE PRZEZ CALY PLIK
               {

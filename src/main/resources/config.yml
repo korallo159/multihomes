@@ -1,17 +1,15 @@
 
-
-
-messagesucesshome: 'Teleported to: '
-messagesucesssethome: 'Home set.'
+messagesucesshome: 'Teleported to:'
+messagesucesssethome: 'Home set'
 sethomenoargs: 'Usage /sethome <home>'
 sethomenull: 'This home doesnt exist'
 homelistnull: 'You dont have any home!'
-homelist: 'Home list '
+homelist: 'List of homes: '
 unknownhome: 'You dont have home '
 delhomenoargs: 'Usage /delhome <home>'
 youdeletedhome: 'Deleted home: '
-item: 'DIAMOND'
-itemamount: 64
+item: DIAMOND
+itemamount: 10
 itemconsumed: 'You have increased limit!'
 maxhomes: 5
 youneeditem: 'If you want more homes, you have to get: '

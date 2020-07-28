@@ -29,6 +29,7 @@ public class multihomesCommands implements CommandExecutor {
 
     Multihomes plugin;
     public multihomesCommands(final Multihomes plugin) {
+
         this.plugin = plugin;
     }
 
@@ -106,18 +107,24 @@ public class multihomesCommands implements CommandExecutor {
                     final World world = Bukkit.getWorld(this.plugin.homes.getString("Homes." + id + "." + plugin.homename + ".World"));
                     final Location home = new Location(world, x, y, z, yaw, pitch);
                     final World temporaryworld = player.getWorld();
-                    final double xa = player.getLocation().getX();
-                    final double ya = player.getLocation().getY();
-                    final double za = player.getLocation().getZ();
-                    final Location temporary = new Location(temporaryworld, xa, ya, za);
-                    if(!player.hasPermission("multihomes.bypass.delay")) {
+                    final World temporaryworld2 = player.getWorld();
+                    final int xc = player.getLocation().getBlockX() ;
+                    final int yc = player.getLocation().getBlockY();
+                    final int zc = player.getLocation().getBlockZ();
+                    final Location temporary = new Location(temporaryworld2, xc, yc, zc);
+                    if(player.hasPermission("multihomes.bypass.delay") || this.plugin.getConfig().getInt("delaytime") == 0) {
+                        player.teleport(home);
+                        player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + ChatColor.DARK_RED + args[0]);
+                    }
+                    else
+                    {
                         player.sendMessage(ChatColor.RED + this.plugin.getConfig().getString("youwillbetp") +ChatColor.DARK_RED + this.plugin.getConfig().getInt("delaytime") + "s");
                         this.plugin.getServer().getScheduler().scheduleSyncDelayedTask(this.plugin, new Runnable() {
                             public void run() {
                                 final World temporaryworld2 = player.getWorld();
-                                final double xb = player.getLocation().getX();
-                                final double yb = player.getLocation().getY();
-                                final double zb = player.getLocation().getZ();
+                                final int xb = player.getLocation().getBlockX() ;
+                                final int yb = player.getLocation().getBlockY();
+                                final int zb = player.getLocation().getBlockZ();
                                 final Location temporary2 = new Location(temporaryworld2, xb, yb, zb);
                                 if(temporary.equals(temporary2)) {
                                     player.teleport(home);
@@ -126,14 +133,10 @@ public class multihomesCommands implements CommandExecutor {
                                 else {
                                     player.sendMessage(ChatColor.RED + plugin.getConfig().getString("tpcanceled"));
                                     Bukkit.getScheduler().cancelTasks(plugin);
+
                                 }
                             }
                         }, 20L * plugin.getConfig().getInt("delaytime"));// 60 L == 3 sec, 20 ticks == 1 sec
-                    }
-                    else
-                    {
-                        player.teleport(home);
-                        player.sendMessage(ChatColor.GREEN + plugin.getConfig().getString("messagesucesshome") + ChatColor.DARK_RED +args[0]);
                     }
 
                 }
@@ -161,6 +164,28 @@ public class multihomesCommands implements CommandExecutor {
                 player.sendMessage(ChatColor.DARK_RED + plugin.getConfig().getString("homelist") + ChatColor.RED + list.toString());
 
             }
+
+            if (label.equalsIgnoreCase("homelist") && args.length == 0) {
+                final String id = player.getUniqueId().toString();
+                ConfigurationSection cfgList = this.plugin.homes.getConfigurationSection("Homes." + id);
+                List<String> list = new ArrayList<>(); // LISTA
+
+                if (cfgList == null || cfgList.getKeys(false).size() == 0) {
+                    player.sendMessage(ChatColor.RED + plugin.getConfig().getString("homelistnull"));
+                    return true;
+                }
+                for (String home : cfgList.getKeys(false))                        //PRZELATYWANIE PRZEZ CALY PLIK
+                {
+                    // player.sendMessage("Home: " + cfgList.getString(home + ".Homename"));      //Wyswietlanie kazdego po kolei
+                    list.add(home);
+                    // DODAWANIE DO LISTY KAZDEGO KLUCZA PRZEZ FORA
+                }
+                player.sendMessage(ChatColor.DARK_RED + plugin.getConfig().getString("homelist") + ChatColor.RED + list.toString());
+
+            }
+
+
+
 
             if (label.equalsIgnoreCase("homehelp")) {
                 player.sendMessage(ChatColor.RED + "/home" + ChatColor.YELLOW + plugin.getConfig().getString("home"));
