@@ -5,17 +5,31 @@ api-version: 1.13
 authors: [koral]
 commands:
   sethome:
+    permission: multihomes.default
   home:
+    permission: multihomes.default
   delhome:
+    permission: multihomes.default
   homelist:
+    permission: multihomes.default
   homehelp:
+    permission: multihomes.default
   homereload:
     usage: /homereload
     description: reload configuration files
     permission: multihomes.reload
     permission-message: Sorry! You don't have permission to execute that command.
 permissions:
+  multihomes.*:
+    default: op
+    children:
+      multihomes.default: true
+      multihomes.reload: true
+      multihomes.bypass.delay: true
+  multihomes.default:
+    default: op
   multihomes.reload:
-    description: allows usage /homereload
+    default: op
+  multihomes.bypass.delay:
     default: op
 
